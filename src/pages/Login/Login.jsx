@@ -1,20 +1,52 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth'
+import { TbFidgetSpinner } from 'react-icons/tb';
+import toast from 'react-hot-toast';
+import { getToken, saveUser } from '../../api/auth';
 
 const Login = () => {
-   const {createUser,updateUserProfile, signInWithGoogle, loading} = useAuth();
-   const navigate = useNavigate();
-   
-   const handleSubmit = async (e) => {
+  const { signIn, signInWithGoogle, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-    const image = form.image.files[0];
-    console.log({name,email,password,image});
-   }
+    console.log({ email, password, });
+    try {
+      // login 
+      const signInResult = signIn(email, password);
+      // token 
+      await getToken(signInResult?.user?.email);
+
+      navigate(location?.state ? location?.state : '/');
+      toast.success('Sign in Successfully!')
+    }
+    catch (error) {
+      toast.error(error.message)
+    }
+  }
+  const handleGoogleSignIn = async () => {
+    try {
+      // google sign in 
+      const googleResult = await signInWithGoogle();
+
+      // save user data in database 
+      const saveUserDB = saveUser(googleResult?.user);
+      console.log(saveUserDB);
+
+      // get token
+      await getToken(googleResult?.user?.email);
+      navigate('/')
+      toast.success('Signup Successfull!')
+    }
+    catch (err) {
+      toast.error(err.message)
+    }
+  }
   return (
     <div className='flex justify-center items-center min-h-screen'>
       <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
@@ -24,7 +56,7 @@ const Login = () => {
             Sign in to access your account
           </p>
         </div>
-        <form onSubmit={handleSubmit}
+        <form onSubmit={handleLogin}
           noValidate=''
           action=''
           className='space-y-6 ng-untouched ng-pristine ng-valid'
@@ -67,7 +99,7 @@ const Login = () => {
               type='submit'
               className='bg-rose-500 w-full rounded-md py-3 text-white'
             >
-              Continue
+              {loading ? <TbFidgetSpinner className='animate-spin mx-auto'></TbFidgetSpinner> : 'Sign In'}
             </button>
           </div>
         </form>
@@ -83,7 +115,7 @@ const Login = () => {
           </p>
           <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
         </div>
-        <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
+        <div onClick={handleGoogleSignIn} className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer hover:bg-gray-200 hover:text-blue-500 transition-all ease-in'>
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>

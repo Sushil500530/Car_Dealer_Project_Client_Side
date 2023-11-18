@@ -3,11 +3,12 @@ import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { imageUpload } from '../../api/utils';
-
+import { getToken, saveUser } from '../../api/auth';
+import {TbFidgetSpinner} from 'react-icons/tb'
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth();
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -15,23 +16,49 @@ const SignUp = () => {
     const email = form.email.value;
     const password = form.password.value;
     const image = form.image.files[0];
-    console.log({ name, email, password, image });
+    // console.log({ name, email, password, image });
     try {
       // upload image 
       const imageData = await imageUpload(image);
-      console.log(imageData);
+      // console.log(imageData);
+
       // user resister
       const userCreateResult = await createUser(email, password);
+
       // save user name and profile photo from update
       await updateUserProfile(name, imageData?.data?.display_url)
       console.log(userCreateResult);
 
+      // save user data in database
+      const saveUserDB = await saveUser(userCreateResult?.user);
+      console.log(saveUserDB);
+      
+      // get token from user email
+      await getToken(userCreateResult?.user?.email)
       navigate('/')
       toast.success('Signup Successfull!')
     }
     catch (error) {
       console.log(error);
       toast.error(error.message)
+    }
+  }
+  const handleGoogleSignIn =async () => {
+    try{
+      // google sign in 
+      const googleResult = await signInWithGoogle();
+
+      // save user data in database 
+      const saveUserDB = saveUser(googleResult?.user);
+      console.log(saveUserDB);
+
+      // get token
+      await getToken(googleResult?.user?.email);
+      navigate('/')
+      toast.success('Signup Successfull!')
+    }
+    catch(err){
+      toast.error()
     }
   }
   return (
@@ -109,7 +136,7 @@ const SignUp = () => {
               type='submit'
               className='bg-rose-500 w-full rounded-md py-3 text-white'
             >
-              Continue
+              {loading ? <TbFidgetSpinner className="animate-spin mx-auto"></TbFidgetSpinner> : "SignUp" }
             </button>
           </div>
         </form>
@@ -120,7 +147,7 @@ const SignUp = () => {
           </p>
           <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
         </div>
-        <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
+        <div  onClick={handleGoogleSignIn} className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer hover:bg-slate-200 transition-all ease-in hover:text-blue-500'>
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>

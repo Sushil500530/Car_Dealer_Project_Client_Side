@@ -2,7 +2,7 @@
 const ManageUsers = () => {
     return (
         <div>
-            
+            manage users
         </div>
     );
 };

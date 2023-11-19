@@ -1,10 +1,10 @@
 import { AiOutlineBars } from "react-icons/ai";
-import Logo from "../../Shared/Logo";
 import { useState } from "react";
-import MenuItems from "../MenuItems";
 import { BsGraphUp } from "react-icons/bs";
 import { FcSettings } from "react-icons/fc";
 import { GrLogout } from 'react-icons/gr';
+import MenuItems from "../MenuItems";
+import Logo from "../../Shared/Logo";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 import ToggleBtn from "../../Button/ToggleBtn";
@@ -18,7 +18,7 @@ const Sidebar = () => {
     const [toggle, setToggle] = useState(false);
     const { logOut } = useAuth();
     const [role] = useRole();
-console.log(role);
+    console.log(role);
 
     // for guest/host menu item toggle button 
     const toggleHandler = () => {
@@ -32,7 +32,7 @@ console.log(role);
     return (
         <div>
             {/* responsive small device */}
-            <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
+            <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden w-full h-[80px]">
                 <div>
                     <div className="block cursor-pointer p-5 font-bold">
                         <Logo />
@@ -43,7 +43,7 @@ console.log(role);
                 </button>
             </div>
             {/* sidebar  */}
-            <div className={`z-10 md:fixed flex flex-col justify-between overfow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${isActive && '-translate-x-full'} md:translate-x-0 transition duration-200 ease-in-out`}>
+            <div className={`z-10 md:fixed flex flex-col justify-between overfow-x-hidden bg-gray-100 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform w-64 ${isActive && '-translate-x-full'} md:translate-x-0 transition duration-200 ease-in-out `}>
                 <div>
                     <div>
                         <div className='w-full hidden md:flex px-4 py-2 shadow rounded-lg justify-center items-center mx-auto'>
@@ -54,7 +54,7 @@ console.log(role);
                     {/* Nav Items */}
                     <div className='flex flex-col justify-between flex-1 mt-6'>
                         {/* If a user is host */}
-                        {role === 'host' && <ToggleBtn toggleHandler={toggleHandler} />}
+                        <ToggleBtn toggleHandler={toggleHandler} />
                         <nav>
                             <MenuItems
                                 icon={BsGraphUp}
@@ -63,9 +63,15 @@ console.log(role);
                             />
 
                             {/* Host Menu Items */}
-                            {role === 'guest' && <GuestMenu />}
+                            {/* {role === 'guest' && <GuestMenu />}
                             {role === 'host' ? toggle ? <HostMenu /> : <GuestMenu /> : ''}
-                            {role === 'admin' && <AdminMenu />}
+                        {role === 'admin' && <AdminMenu />} */}
+                  
+                            {
+
+                                toggle ? <HostMenu /> : <GuestMenu /> 
+                         }
+                            <AdminMenu />
                         </nav>
                     </div>
                 </div>

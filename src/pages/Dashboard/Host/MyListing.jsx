@@ -2,7 +2,7 @@
 const MyListing = () => {
     return (
         <div>
-            
+            my listings
         </div>
     );
 };

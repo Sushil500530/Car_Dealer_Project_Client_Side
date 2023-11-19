@@ -7,6 +7,9 @@ import SignUp from '../pages/SignUp/SignUp'
 import RoomDetails from '../pages/RoomDetails/RoomDetails'
 import Dashboard from '../layouts/Dashboard'
 import { getCar } from '../api/cars'
+import AddCar from '../pages/Dashboard/Host/AddCar'
+import MyListing from '../pages/Dashboard/Host/MyListing'
+import ManageUsers from '../pages/Dashboard/Admin/ManageUsers'
 
 export const router = createBrowserRouter([
   {
@@ -19,18 +22,31 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-         path: '/room/:id',
-          element: <RoomDetails />, 
-        loader: ({params}) => getCar(params.id)
-        },
+        path: '/room/:id',
+        element: <RoomDetails />,
+        loader: ({ params }) => getCar(params.id)
+      },
     ],
   },
   { path: '/login', element: <Login /> },
   { path: '/signup', element: <SignUp /> },
-  { path: '/dashboard', element: <Dashboard></Dashboard>, children: [ 
-    // {
-    //   path:'add-car',
-    //   element:
-    // }
-  ] }
+  {
+    path: '/dashboard',
+    element: <Dashboard></Dashboard>,
+    children: [
+      {
+        path: 'add-car',
+        element: <AddCar />
+      },
+      {
+        path: 'my-listings',
+        element: <MyListing />
+      },
+      {
+        path: 'manage-users',
+        element: <ManageUsers />
+      },
+    ]
+
+  }
 ])

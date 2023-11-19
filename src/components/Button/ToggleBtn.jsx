@@ -9,7 +9,7 @@ const ToggleBtn = ({ toggleHandler }) => {
             <span className="px-4 py-1 rounded-l-md bg-red-400 peer-checked:bg-gray-300">
                 Guest
             </span>
-            <span className="px-4 py-1 rounded-l-md bg-red-400 peer-checked:bg-gray-300">
+            <span className="px-4 py-1 rounded-r-md peer-checked:bg-red-400 bg-gray-300">
                 Host
             </span>
             </label>

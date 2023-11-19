@@ -1,37 +1,38 @@
-import { useEffect, useState } from 'react'
-import Container from '../../components/Shared/Container'
-import { useParams } from 'react-router-dom'
-import Loader from '../../components/Shared/Loader'
-import { Helmet } from 'react-helmet-async'
+
+import Container from '../../components/Shared/Container';
+import { useLoaderData } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Header from './Header';
+import RoomInfo from '../../components/RoomDetails/RoomInfo';
+import RoomReservation from '../../components/RoomDetails/RoomReservation';
 
 const RoomDetails = () => {
-  const { id } = useParams()
-  const [room, setRoom] = useState({})
-  const [loading, setLoading] = useState(false)
+  const car = useLoaderData();
+  // console.log(car);
 
-  useEffect(() => {
-    setLoading(true)
-    fetch('/rooms.json')
-      .then(res => res.json())
-      .then(data => {
-        const singleRoom = data.find(room => room._id === id)
-        setRoom(singleRoom)
-        setLoading(false)
-      })
-  }, [id])
-
-  if (loading) return <Loader />
   return (
-    <Container>
+    <div className='container mx-auto'>
       <Helmet>
-        <title>{room?.title}</title>
+        <title>{car?.title}</title>
       </Helmet>
-      <div className=''>
-        <div className='flex flex-col gap-6'>{/* Header */}</div>
-        <div className=''>{/* Room Info */}</div>
-        {/* Calender */}
-      </div>
-    </Container>
+      {
+        car && (
+          <div className=''>
+            <div className='flex flex-col gap-6'>
+              {/* Header */}
+              <Header car={car} />
+            </div>
+            {/* Room Info */}
+            <div className='grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6'>
+              <RoomInfo car={car} />
+              {/* Calender */}
+              <div className='md:col-span-3 order-first md:order-last mb-10'>
+                <RoomReservation car={car} />
+              </div>
+            </div>
+          </div>
+        )}
+    </div>
   )
 }
 

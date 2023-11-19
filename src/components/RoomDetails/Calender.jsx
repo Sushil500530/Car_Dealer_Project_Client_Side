@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types */
 import { DateRange } from 'react-date-range'
 
-const Calender = () => {
+const DatePicker = ({ value }) => {
   return (
-    <DateRange
-      rangeColors={['#F43F5E']}
-      direction='vertical'
-      showDateDisplay={false}
-    />
+    <>
+      <DateRange
+        rangeColors={['#F43F5E']}
+        ranges={[value]}
+        direction='vertical'
+        minDate={value.startDate}
+        maxDate={value.endDate}
+      />
+    </>
   )
 }
 
-export default Calender
+export default DatePicker

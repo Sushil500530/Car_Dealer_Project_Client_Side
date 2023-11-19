@@ -4,22 +4,20 @@ import Container from '../Shared/Container'
 import { useSearchParams } from 'react-router-dom'
 import Heading from '../Shared/Heading'
 import Loader from '../Shared/Loader'
+import { getAllCars } from '../../api/cars'
 
 const Rooms = () => {
-  const [rooms, setRooms] = useState([])
-  const [params, setParams] = useSearchParams()
+  const [cars, setCars] = useState([])
+  const [params, setParams] = useSearchParams();
   const [loading, setLoading] = useState(false)
-  const category = params.get('category')
-
+  const category = params.get('category');
   useEffect(() => {
     setLoading(true)
-    fetch('./rooms.json')
-      .then(res => res.json())
-      .then(data => {
+      getAllCars().then(data => {
         if (category) {
           const filtered = data.filter(room => room.category === category)
-          setRooms(filtered)
-        } else setRooms(data)
+          setCars(filtered)
+        } else setCars(data)
 
         setLoading(false)
       })
@@ -28,10 +26,10 @@ const Rooms = () => {
   if (loading) return <Loader />
   return (
     <Container>
-      {rooms && rooms.length > 0 ? (
+      {cars && cars.length > 0 ? (
         <div className='pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8'>
-          {rooms.map(room => (
-            <Card key={room._id} room={room} />
+          {cars.map(car => (
+            <Card key={car._id} room={car} />
           ))}
         </div>
       ) : (

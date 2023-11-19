@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 
 const Dashboard = () => {
@@ -8,7 +9,7 @@ const Dashboard = () => {
             <div className="flex-1 md:ml-64">
                 <div className="p-5">
                     {/* use outlet  for route other pages */}
-
+                    <Outlet></Outlet>
                 </div>
             </div>
         </div>

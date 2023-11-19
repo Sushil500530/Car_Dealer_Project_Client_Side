@@ -1,9 +1,11 @@
+
 import { DateRange } from 'react-date-range'
 import { TbFidgetSpinner } from 'react-icons/tb'
 import { categories } from '../Categories/CategoriesData';
 
 
-const AddCardForm = ({  handleSubmit,
+
+const AddCarForm = ({  handleSubmit,
     dates,
     handleDates,
     loading = false,
@@ -11,7 +13,7 @@ const AddCardForm = ({  handleSubmit,
     uploadButtonText,}) => {
     return (
         <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
             <div className='space-y-6'>
               <div className='space-y-1 text-sm'>
@@ -49,7 +51,12 @@ const AddCardForm = ({  handleSubmit,
                 <label htmlFor='location' className='block text-gray-600'>
                   Select Availability Range
                 </label>
-                <DateRange rangeColors={['#F43F5E']} />
+                <DateRange 
+                ranges={[dates]}
+                rangeColors={['#F43F5E']}
+                onChange={handleDates}
+                minDate={new Date()}
+                />
               </div>
             </div>
             <div className='space-y-6'>
@@ -103,7 +110,7 @@ const AddCardForm = ({  handleSubmit,
   
                 <div className='space-y-1 text-sm'>
                   <label htmlFor='guest' className='block text-gray-600'>
-                    Total guest
+                    Total Sit
                   </label>
                   <input
                     className='w-full px-4 py-3 text-gray-800 border border-rose-300 focus:outline-rose-500 rounded-md '
@@ -118,29 +125,29 @@ const AddCardForm = ({  handleSubmit,
   
               <div className='flex justify-between gap-2'>
                 <div className='space-y-1 text-sm'>
-                  <label htmlFor='bedrooms' className='block text-gray-600'>
-                    Bedrooms
+                  <label htmlFor='first_site' className='block text-gray-600'>
+                    first site
                   </label>
                   <input
                     className='w-full px-4 py-3 text-gray-800 border border-rose-300 focus:outline-rose-500 rounded-md '
-                    name='bedrooms'
-                    id='bedrooms'
+                    name='first_site'
+                    id='first_site'
                     type='number'
-                    placeholder='Bedrooms'
+                    placeholder='first_site'
                     required
                   />
                 </div>
   
                 <div className='space-y-1 text-sm'>
-                  <label htmlFor='bathrooms' className='block text-gray-600'>
-                    Bathrooms
+                  <label htmlFor='back_site' className='block text-gray-600'>
+                    back site
                   </label>
                   <input
                     className='w-full px-4 py-3 text-gray-800 border border-rose-300 focus:outline-rose-500 rounded-md '
-                    name='bathrooms'
-                    id='bathrooms'
+                    name='back_site'
+                    id='back_site'
                     type='number'
-                    placeholder='Bathrooms'
+                    placeholder='back_site'
                     required
                   />
                 </div>
@@ -175,4 +182,4 @@ const AddCardForm = ({  handleSubmit,
     );
 };
 
-export default AddCardForm;
+export default AddCarForm;
